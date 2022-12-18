@@ -2,8 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { Documents } from './document';
+import { Folder } from './folder';
 
 export enum UserRoles {
   Admin = 'admin',
@@ -26,4 +30,10 @@ export class Users {
 
   @CreateDateColumn()
   createdAt!: Date;
+
+  @OneToMany(() => Folder, (s) => s.users)
+  folders!: Folder[];
+
+  @OneToMany(() => Documents, (s) => s.users)
+  documents!: Documents[];
 }
