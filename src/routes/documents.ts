@@ -1,48 +1,53 @@
-import { CreateDocumentDto } from './../interfaces/dto/documentDto';
+import {
+  deleteDocumentByIdService,
+  updateDocumentByIdService,
+} from './../services/documents';
+import {
+  CreateDocumentDto,
+  UpdateDocumentDto,
+} from './../interfaces/dto/documentDto';
 import { authMiddleware } from '../authValidating';
 import { Router } from 'express';
 import { bodyValidator } from '../helpers/bodyValidator';
-import { createDocumentService } from '../services/documents';
+import {
+  createDocumentService,
+  getDocumentsByFolderIdService,
+} from '../services/documents';
 
 export const documents = Router();
 
-documents.post('/:folderId/documents', authMiddleware, async (req, res) => {
+documents.post('/documents', authMiddleware, async (req, res) => {
   const data = await bodyValidator(CreateDocumentDto, req.body);
-  const result = await createDocumentService(
+  const result = await createDocumentService(req['userId'], data);
+  res.send(result);
+});
+
+documents.put('/documents/:documentsId', authMiddleware, async (req, res) => {
+  const data = await bodyValidator(UpdateDocumentDto, req.body);
+  const result = await updateDocumentByIdService(
     req['userId'],
-    Number(req.params.folderId),
+    Number(req.params.documentsId),
     data,
   );
   res.send(result);
 });
 
-// folders.put('/folders/:folderId', authMiddleware, async (req, res) => {
-//   const data = await bodyValidator(UpdateFolderDto, req.body);
-//   const result = await updateFolderService(
-//     req['userId'],
-//     Number(req.params.folderId),
-//     data,
-//   );
-//   res.send(result);
-// });
+documents.get('/documents', authMiddleware, async (req, res) => {
+  const result = await getDocumentsByFolderIdService(
+    req['userId'],
+    Number(req.query.folderId),
+  );
+  res.send(result);
+});
 
-// folders.get('/folders', authMiddleware, async (req, res) => {
-//   const result = await getFolderService(req['userId']);
-//   res.send(result);
-// });
-
-// folders.get('/folders/:folderId', authMiddleware, async (req, res) => {
-//   const result = await getFolderByIdService(
-//     req['userId'],
-//     Number(req.params.folderId),
-//   );
-//   res.send(result);
-// });
-
-// folders.delete('/folders/:folderId', authMiddleware, async (req, res) => {
-//   const result = await deleteFolderByIdService(
-//     req['userId'],
-//     Number(req.params.folderId),
-//   );
-//   res.send(result);
-// });
+documents.delete(
+  '/documents/:documentsId',
+  authMiddleware,
+  async (req, res) => {
+    const result = await deleteDocumentByIdService(
+      req['userId'],
+      Number(req.params.documentsId),
+    );
+    res.send(result);
+  },
+);

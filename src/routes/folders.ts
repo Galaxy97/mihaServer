@@ -49,5 +49,3 @@ folders.delete('/folders/:folderId', authMiddleware, async (req, res) => {
   );
   res.send(result);
 });
-
-folders.use('/folders', documents);

@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { IsString } from 'class-validator';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 
 export class CreateDocumentDto {
   @Expose()
@@ -9,4 +9,25 @@ export class CreateDocumentDto {
   @Expose()
   @IsString()
   description!: string;
+
+  @Expose()
+  @IsInt()
+  foldersId!: number;
+}
+
+export class UpdateDocumentDto {
+  @Expose()
+  @IsString()
+  @IsOptional()
+  name?: string;
+
+  @Expose()
+  @IsString()
+  @IsOptional()
+  description?: string;
+
+  @Expose()
+  @IsInt()
+  @IsOptional()
+  foldersId?: number;
 }
