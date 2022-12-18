@@ -140,3 +140,22 @@ export const deleteDocumentByIdService = async (
     documentId: existedDocument.id,
   };
 };
+
+export const signDocumentByIdService = async (documentsId: number) => {
+  const existedDocument = await dbConnection.getRepository(Documents).findOne({
+    where: {
+      id: documentsId,
+    },
+  });
+
+  if (!existedDocument) throw new RequestError(400, 'Document is not exist');
+
+  existedDocument.status = DocumentStatuses.Signed;
+
+  await dbConnection.getRepository(Documents).save(existedDocument);
+
+  return {
+    documentId: existedDocument.id,
+    status: existedDocument.status,
+  };
+};

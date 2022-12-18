@@ -1,5 +1,7 @@
+import { RequestError } from './../errors/RequestError';
 import {
   deleteDocumentByIdService,
+  signDocumentByIdService,
   updateDocumentByIdService,
 } from './../services/documents';
 import {
@@ -13,6 +15,7 @@ import {
   createDocumentService,
   getDocumentsByFolderIdService,
 } from '../services/documents';
+import { UserRoles } from '../db/users';
 
 export const documents = Router();
 
@@ -48,6 +51,21 @@ documents.delete(
       req['userId'],
       Number(req.params.documentsId),
     );
+    res.send(result);
+  },
+);
+
+documents.post(
+  '/documents/:documentsId/signed',
+  authMiddleware,
+  async (req, res) => {
+    if (req['userRole'] !== UserRoles.Admin)
+      throw new RequestError(401, 'Action is not allowed');
+
+    const result = await signDocumentByIdService(
+      Number(req.params.documentsId),
+    );
+
     res.send(result);
   },
 );
