@@ -9,6 +9,7 @@ import { authMiddleware } from '../authValidating';
 import { Router } from 'express';
 import { bodyValidator } from '../helpers/bodyValidator';
 import { CreateFolderDto, UpdateFolderDto } from '../interfaces/dto/folderDto';
+import { documents } from './documents';
 
 export const folders = Router();
 
@@ -48,3 +49,5 @@ folders.delete('/folders/:folderId', authMiddleware, async (req, res) => {
   );
   res.send(result);
 });
+
+folders.use('/folders', documents);

@@ -19,15 +19,15 @@ export const createDocumentService = async (
   const document = dbConnection.getRepository(Documents).create({
     ...dataDto,
     status: DocumentStatuses.Signature,
-    folderId: folder.id,
-    userId: userId,
+    foldersId: folder.id,
+    usersId: userId,
   });
   const savedDocument = await dbConnection
     .getRepository(Documents)
     .save(document);
 
   return {
-    folderId: savedDocument.folderId,
+    folderId: savedDocument.foldersId,
     documentId: savedDocument.id,
     name: savedDocument.name,
     description: savedDocument.description,

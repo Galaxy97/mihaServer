@@ -39,11 +39,11 @@ export class Documents {
   @JoinColumn()
   folders!: Folder;
   @Column({ nullable: true })
-  folderId!: number;
+  foldersId!: number;
 
   @ManyToOne(() => Users, { nullable: false, onDelete: 'CASCADE' })
   @JoinColumn()
   users!: Users;
   @Column({ nullable: true })
-  userId!: number;
+  usersId!: number;
 }
