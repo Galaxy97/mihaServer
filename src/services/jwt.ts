@@ -4,7 +4,7 @@ import { sign } from 'jsonwebtoken';
 export const generateJWT = (role: UserRoles, userId: number) => {
   return {
     token: sign({ role, userId }, 'superSecret', {
-      expiresIn: '100m',
+      expiresIn: '1m',
     }),
   };
 };
