@@ -36,6 +36,10 @@ documents.put('/documents/:documentsId', authMiddleware, async (req, res) => {
 });
 
 documents.get('/documents', authMiddleware, async (req, res) => {
+  if (req['userRole'] !== UserRoles.Admin) {
+    const result = await getDocumentsByFolderIdService();
+    res.send(result);
+  }
   const result = await getDocumentsByFolderIdService(
     req['userId'],
     Number(req.query.folderId),

@@ -36,10 +36,25 @@ export const createDocumentService = async (
 };
 
 export const getDocumentsByFolderIdService = async (
-  usersId: number,
+  usersId?: number,
   foldersId?: number,
 ) => {
   let documents: Documents[] = [];
+
+  if (!usersId) {
+    documents = await dbConnection.getRepository(Documents).find();
+    return documents.map((document) => {
+      return {
+        folderId: document.foldersId,
+        documentId: document.id,
+        name: document.name,
+        description: document.description,
+        status: document.status,
+        createdAt: document.createdAt,
+        updatedAt: document.updatedAt,
+      };
+    });
+  }
 
   if (foldersId) {
     const folder = await getFolderByIdService(usersId, foldersId);
